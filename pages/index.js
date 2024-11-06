@@ -7,6 +7,7 @@ import useTheme from "../hooks/useTheme";
 import * as htmlToImage from "html-to-image";
 import FileSaver from "file-saver";
 import Image from "next/image";
+import ImageHP from "../public/1.png";
 
 const Home = () => {
   const name = "Phú";
@@ -134,7 +135,7 @@ const Home = () => {
 
       <main className={styles.animate}>
         <div className={styles.imageContainer}>
-          <Image src="/1.jpg" width={300} height={300} alt="phu"></Image>
+          <Image src={ImageHP} width={300} height={300} alt="phu"></Image>
         </div>
 
         <div>

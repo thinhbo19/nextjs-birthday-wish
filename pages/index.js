@@ -10,7 +10,7 @@ import Image from "next/image";
 import ImageHP from "../public/1.png";
 
 const Home = () => {
-  const name = "Phú";
+  const name = "KHANG VÕ";
   const color = 0;
 
   const [downloading, setDownloading] = useState(false);

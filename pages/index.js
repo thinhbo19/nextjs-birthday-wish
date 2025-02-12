@@ -17,22 +17,52 @@ const Home = () => {
   const [downloadedOnce, setDownloadedOnce] = useState(false);
   const audioRef = useRef();
   const [isClient, setIsClient] = useState(false); // Kiểm tra xem đang chạy trên client
+  const [showEffect, setShowEffect] = useState(false);
 
   const { setTheme } = useTheme();
 
   useEffect(() => {
-    setIsClient(true); // Thiết lập trạng thái khi đang ở phía client
-
+    setIsClient(true);
     setTheme(color);
 
     if (downloading === false) {
       const confettiSettings = {
         target: "canvas",
         start_from_edge: true,
+        max: 200,
+        size: 2,
+        clock: 45,
+        rotate: true,
+        props: ["circle", "square", "triangle", "line"],
+        colors: [
+          [255, 0, 0], // Đỏ
+          [255, 77, 0], // Cam đỏ
+          [255, 153, 0], // Cam
+          [255, 204, 0], // Vàng cam
+          [255, 255, 0], // Vàng
+          [153, 255, 0], // Xanh lá nhạt
+          [0, 255, 0], // Xanh lá
+          [0, 255, 204], // Xanh ngọc
+          [0, 204, 255], // Xanh dương nhạt
+          [0, 153, 255], // Xanh dương
+          [0, 51, 255], // Xanh dương đậm
+          [153, 0, 255], // Tím
+          [255, 0, 255], // Hồng đậm
+          [255, 153, 204], // Hồng nhạt
+        ],
+        spread: 180,
+        respawn: true,
+        width: window.innerWidth, // Thêm chiều rộng
+        height: window.innerHeight, // Thêm chiều cao
       };
       const confetti = new ConfettiGenerator(confettiSettings);
       confetti.render();
       audioRef.current.play();
+
+      setTimeout(() => setShowEffect(true), 500);
+
+      // Cleanup function
+      return () => confetti.clear();
     }
   }, [color, downloading]);
 
@@ -133,22 +163,39 @@ const Home = () => {
 
       <canvas className={styles.canvas} id="canvas"></canvas>
 
-      <main className={styles.animate}>
-        <div className={styles.imageContainer}>
-          <Image src={ImageHP} width={300} height={300} alt="phu"></Image>
+      <main className={`${styles.animate} ${showEffect ? styles.fadeIn : ""}`}>
+        <div className={`${styles.imageContainer} ${styles.floating}`}>
+          <Image
+            src={ImageHP}
+            width={300}
+            height={300}
+            alt="phu"
+            className={styles.profileImage}
+          />
         </div>
 
-        <div>
-          <div className={styles.main}>{title(name)}</div>
-          <p className={styles.desc}>
+        <div className={styles.contentWrapper}>
+          <div className={`${styles.main} ${styles.glowing}`}>
+            {title(name)}
+          </div>
+          <p className={`${styles.desc} ${styles.typewriter}`}>
             {messages[randomNumber(0, messages.length)].value}
           </p>
         </div>
 
-        {/* Render ảnh nhỏ */}
+        <button
+          className={styles.musicButton}
+          onClick={() =>
+            audioRef.current.paused
+              ? audioRef.current.play()
+              : audioRef.current.pause()
+          }
+        >
+          🎵
+        </button>
       </main>
 
-      <audio ref={audioRef} id="player" autoPlay>
+      <audio ref={audioRef} id="player" autoPlay loop>
         <source src="media/hbd.mp3" />
       </audio>
     </div>
